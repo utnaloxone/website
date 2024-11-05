@@ -1,4 +1,4 @@
-import observe from '../../utils/intOb.js';
+import observe from '../../scripts/utils/intOb.js';
 
 function decorate(el) {
   el.innerHTML = `<iframe src="${el.dataset.src}" class="youtube"

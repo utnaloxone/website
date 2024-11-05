@@ -1,6 +1,6 @@
 (async function loadLazy() {
-  import('../utils/favicon.js');
-  import('../utils/footer.js');
+  import('./utils/favicon.js');
+  import('./utils/footer.js');
   import('../deps/rum.js').then(({ sampleRUM }) => {
     sampleRUM('load');
     sampleRUM('lazy');

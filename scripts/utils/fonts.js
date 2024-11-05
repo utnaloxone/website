@@ -1,4 +1,4 @@
-import { getConfig, loadStyle } from '../scripts/nexter.js';
+import { getConfig, loadStyle } from '../nx.js';
 
 const KITS = { en: 'hah7vzn.css' };
 

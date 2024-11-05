@@ -1,4 +1,4 @@
-import { getMetadata, loadBlock } from '../scripts/nexter.js';
+import { getMetadata, loadBlock } from '../nx.js';
 
 (async function loadFooter() {
   const footer = document.querySelector('footer');

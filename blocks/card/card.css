@@ -1,4 +1,4 @@
-.nx-card {
+.card {
   box-shadow: 0 0 2px 0 rgb(0 0 0 / 12%), 0 3px 6px 0 rgb(0 0 0 / 4%), 0 4px 8px 0 rgb(0 0 0 / 8%);
   padding: var(--spacing-400);
   border-radius: var(--s2-radius-300);
@@ -6,47 +6,47 @@
   background-color: #FFF;
 }
 
-.nx-card-inner {
+.card-inner {
   display: grid;
   grid-template-rows: auto 1fr auto;
   height: 100%;
   gap: var(--spacing-400)
 }
 
-.nx-card-picture-container {
+.card-picture-container {
   position: relative;
   border-radius: var(--s2-radius-100);
   overflow: hidden;
   padding-bottom: 60%;
 }
 
-.nx-card-picture-container picture {
+.card-picture-container picture {
   position: absolute;
   inset: 0;
 }
 
-.nx-card-picture-container img {
+.card-picture-container img {
   object-fit: cover;
   width: 100%;
   height: 100%;
 }
 
-.nx-card-content-container :first-child {
+.card-content-container :first-child {
   margin-top: 0;
 }
 
-.nx-card-content-container :last-child {
+.card-content-container :last-child {
   margin-bottom: 0;
 }
 
-.nx-card-cta-container {
+.card-cta-container {
   margin: 0;
   display: flex;
   justify-content: end;
 }
 
 
-.nx-card-cta-container strong a {
+.card-cta-container strong a {
   background-color: var(--s2-blue-800);
   border-radius: var(--s2-radius-300);
   border: 2px solid var(--s2-blue-800);
@@ -64,7 +64,7 @@
   transition: outline-offset .2s;
 }
 
-.nx-card-cta-container strong a:focus {
+.card-cta-container strong a:focus {
   background-color: #3b63fb;
   border: 2px solid #3b63fb;
   outline-offset: 4px;

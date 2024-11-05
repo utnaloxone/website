@@ -24,9 +24,9 @@ async function handleLayout(text, section, type) {
 
 function handleContainer(section) {
   const container = document.createElement('div');
-  container.className = 'nx-section-container';
+  container.className = 'section-container';
   const children = section.childNodes;
-  const filtered = [...children].filter((item) => !item.classList?.contains('nx-section-metadata'));
+  const filtered = [...children].filter((item) => !item.classList?.contains('section-metadata'));
   container.append(...filtered);
   section.insertAdjacentElement('afterbegin', container);
 }
