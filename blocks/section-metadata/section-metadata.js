@@ -44,6 +44,15 @@ export function getColorScheme(section) {
   return getRelativeLuminance(rgb) > 0.5 ? 'light-scheme' : 'dark-scheme';
 }
 
+export function setColorScheme(section) {
+  const scheme = getColorScheme(section);
+  section.querySelectorAll(':scope > *').forEach((el) => {
+    // Reset any pre-made color schemes
+    el.classList.remove('light-scheme', 'dark-scheme');
+    el.classList.add(scheme);
+  });
+}
+
 function handleBackground(background, section) {
   const pic = background.content.querySelector('picture');
   if (pic) {
@@ -54,13 +63,10 @@ function handleBackground(background, section) {
   }
   const color = background.text;
   if (color) {
-    section.style.backgroundColor = color.startsWith('token')
-      ? `var(${color.replace('token', '--color')})`
+    section.style.backgroundColor = color.startsWith('color-token')
+      ? `var(${color.replace('color-token', '--color')})`
       : color;
-    const scheme = getColorScheme(section);
-    section.querySelectorAll(':scope > *').forEach((el) => {
-      el.classList.add(scheme);
-    });
+    setColorScheme(section);
   }
 }
 

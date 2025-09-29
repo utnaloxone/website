@@ -1,5 +1,6 @@
 import { getConfig, getMetadata } from '../../scripts/ak.js';
 import { loadFragment } from '../fragment/fragment.js';
+import { setColorScheme } from '../section-metadata/section-metadata.js';
 
 const { locale } = getConfig();
 
@@ -51,7 +52,7 @@ function decorateLanguage(btn) {
 }
 
 function decorateScheme(btn) {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', async () => {
     const { body } = document;
 
     let currPref = localStorage.getItem('color-scheme');
@@ -67,6 +68,11 @@ function decorateScheme(btn) {
     body.classList.remove(theme.remove);
     body.classList.add(theme.add);
     localStorage.setItem('color-scheme', theme.add);
+    // Re-calculatie section schemes
+    const sections = document.querySelectorAll('.section');
+    for (const section of sections) {
+      setColorScheme(section);
+    }
   });
 }
 
