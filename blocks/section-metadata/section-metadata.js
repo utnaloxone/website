@@ -1,14 +1,66 @@
-function handleBackground(content, section) {
-  const pic = content.querySelector('picture');
+/**
+ * Converts a CSS color value to RGB values
+ * @param {string} color - CSS color value (hex, rgb, rgba, hsl, hsla, or named color)
+ * @returns {Object|null} Object with r, g, b values (0-255) or null if invalid
+ */
+function parseColor(section) {
+  if (!section) return null;
+
+  const computedBg = getComputedStyle(section).backgroundColor;
+  const rgbMatch = computedBg.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (!rgbMatch) return null;
+  return {
+    r: parseInt(rgbMatch[1], 10),
+    g: parseInt(rgbMatch[2], 10),
+    b: parseInt(rgbMatch[3], 10),
+  };
+}
+
+function getRelativeLuminance({ r, g, b }) {
+  // Convert to sRGB
+  const rsRGB = r / 255;
+  const gsRGB = g / 255;
+  const bsRGB = b / 255;
+
+  // Apply gamma correction
+  const rLinear = rsRGB <= 0.03928 ? rsRGB / 12.92 : ((rsRGB + 0.055) / 1.055) ** 2.4;
+  const gLinear = gsRGB <= 0.03928 ? gsRGB / 12.92 : ((gsRGB + 0.055) / 1.055) ** 2.4;
+  const bLinear = bsRGB <= 0.03928 ? bsRGB / 12.92 : ((bsRGB + 0.055) / 1.055) ** 2.4;
+
+  // Calculate relative luminance
+  return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
+}
+
+/**
+ * Determines if a CSS color value is light or dark
+ * @param {string} color - CSS color value
+ * @param {number} threshold - Luminance threshold (default: 0.5)
+ * @returns {boolean} true if light, false if dark, null if invalid color
+ */
+export function getColorScheme(section) {
+  const rgb = parseColor(section);
+  if (!rgb) return null;
+
+  return getRelativeLuminance(rgb) > 0.5 ? 'light-scheme' : 'dark-scheme';
+}
+
+function handleBackground(background, section) {
+  const pic = background.content.querySelector('picture');
   if (pic) {
     section.classList.add('has-background');
     pic.classList.add('section-background');
     section.prepend(pic);
     return;
   }
-  const color = content.textContent;
+  const color = background.text;
   if (color) {
-    section.classList.add(`section-background-color-${color}`);
+    section.style.backgroundColor = color.startsWith('token')
+      ? `var(${color.replace('token', '--color')})`
+      : color;
+    const scheme = getColorScheme(section);
+    section.querySelectorAll(':scope > *').forEach((el) => {
+      el.classList.add(scheme);
+    });
   }
 }
 
@@ -45,6 +97,6 @@ export default async function init(el) {
   if (metadata['spacing-bottom']?.text) handleLayout(metadata['spacing-bottom'].text, section, 'spacing-bottom');
   if (metadata['background-color']?.content) handleBackground(metadata['background-color'].content, section);
   if (metadata['background-image']?.content) handleBackground(metadata['background-image'].content, section);
-  if (metadata.background?.content) handleBackground(metadata.background.content, section);
+  if (metadata.background?.content) handleBackground(metadata.background, section);
   el.remove();
 }
