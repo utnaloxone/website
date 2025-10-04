@@ -8,6 +8,7 @@ const HEADER_PATH = '/fragments/nav/header';
 const HEADER_ACTIONS = [
   '/tools/widgets/scheme',
   '/tools/widgets/language',
+  '/tools/widgets/toggle',
 ];
 
 function closeAllMenus() {
@@ -26,28 +27,30 @@ function toggleMenu(menu) {
   const isOpen = menu.classList.contains('is-open');
   closeAllMenus();
   if (isOpen) {
-    window.document.removeEventListener('click', docClose);
+    document.removeEventListener('click', docClose);
     return;
   }
 
   // Setup the global close event
-  window.document.addEventListener('click', docClose);
-
+  document.addEventListener('click', docClose);
   menu.classList.add('is-open');
 }
 
 function decorateLanguage(btn) {
-  const wrapper = btn.closest('.action-wrapper');
+  const section = btn.closest('.section');
   btn.addEventListener('click', async () => {
-    let menu = wrapper.querySelector('.language.menu');
+    let menu = section.querySelector('.language.menu');
     if (!menu) {
+      const content = document.createElement('div');
+      content.classList.add('block-content');
       const fragment = await loadFragment(`${locale.prefix}${HEADER_PATH}/languages`);
       menu = document.createElement('div');
       menu.className = 'language menu';
       menu.append(fragment);
-      wrapper.append(menu);
+      content.append(menu);
+      section.append(content);
     }
-    toggleMenu(wrapper);
+    toggleMenu(section);
   });
 }
 
@@ -76,11 +79,18 @@ function decorateScheme(btn) {
   });
 }
 
-async function decorateAction(section, pattern) {
-  const link = section.querySelector(`[href*="${pattern}"]`);
+function decorateNavToggle(btn) {
+  btn.addEventListener('click', () => {
+    const header = document.body.querySelector('header');
+    if (header) header.classList.toggle('is-mobile-open');
+  });
+}
+
+async function decorateAction(header, pattern) {
+  const link = header.querySelector(`[href*="${pattern}"]`);
   if (!link) return;
 
-  const icon = link.querySelector('span.icon');
+  const icon = link.querySelector('.icon');
   const text = link.textContent;
   const btn = document.createElement('button');
   if (icon) btn.append(icon);
@@ -91,22 +101,13 @@ async function decorateAction(section, pattern) {
     btn.append(textSpan);
   }
   const wrapper = document.createElement('div');
-  wrapper.className = 'action-wrapper';
+  wrapper.className = `action-wrapper ${icon.classList[1].replace('icon-', '')}`;
   wrapper.append(btn);
   link.parentElement.parentElement.replaceChild(wrapper, link.parentElement);
 
   if (pattern === '/tools/widgets/language') decorateLanguage(btn);
   if (pattern === '/tools/widgets/scheme') decorateScheme(btn);
-}
-
-function decorateBrand(section) {
-  section.classList.add('brand-section');
-  const brandLink = section.querySelector('a');
-  const [, text] = brandLink.childNodes;
-  const span = document.createElement('span');
-  span.className = 'brand-text';
-  span.append(text);
-  brandLink.append(span);
+  if (pattern === '/tools/widgets/toggle') decorateNavToggle(btn);
 }
 
 function decorateMenu(li) {
@@ -125,36 +126,57 @@ function decorateMegaMenu(li) {
 }
 
 function decorateNavItem(li) {
-  const link = li.querySelector('a');
+  li.classList.add('main-nav-item');
+  const link = li.querySelector(':scope > p > a');
+  if (link) link.classList.add('main-nav-link');
   const menu = decorateMegaMenu(li) || decorateMenu(li);
-  if (!menu) return;
+  if (!(menu || link)) return;
   link.addEventListener('click', (e) => {
     e.preventDefault();
     toggleMenu(li);
   });
 }
 
-function decorateMainNav(section) {
-  section.classList.add('main-nav-section');
+function decorateBrandSection(section) {
+  section.classList.add('brand-section');
+  const brandLink = section.querySelector('a');
+  const [, text] = brandLink.childNodes;
+  const span = document.createElement('span');
+  span.className = 'brand-text';
+  span.append(text);
+  brandLink.append(span);
+}
 
-  const mainNavItems = section.querySelectorAll(':scope > .default-content > ul > li');
+function decorateNavSection(section) {
+  section.classList.add('main-nav-section');
+  const navContent = section.querySelector('.default-content');
+  const navList = section.querySelector('ul');
+  if (!navList) return;
+  navList.classList.add('main-nav-list');
+
+  const nav = document.createElement('nav');
+  nav.append(navList);
+  navContent.append(nav);
+
+  const mainNavItems = section.querySelectorAll('nav > ul > li');
   for (const navItem of mainNavItems) {
     decorateNavItem(navItem);
   }
 }
 
-async function decorateActions(section) {
+async function decorateActionSection(section) {
   section.classList.add('actions-section');
-  for (const pattern of HEADER_ACTIONS) {
-    decorateAction(section, pattern);
-  }
 }
 
 async function decorateHeader(fragment) {
   const sections = fragment.querySelectorAll(':scope > .section');
-  if (sections[0]) decorateBrand(sections[0]);
-  if (sections[1]) decorateMainNav(sections[1]);
-  if (sections[2]) decorateActions(sections[2]);
+  if (sections[0]) decorateBrandSection(sections[0]);
+  if (sections[1]) decorateNavSection(sections[1]);
+  if (sections[2]) decorateActionSection(sections[2]);
+
+  for (const pattern of HEADER_ACTIONS) {
+    decorateAction(fragment, pattern);
+  }
 }
 
 /**

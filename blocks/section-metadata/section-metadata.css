@@ -1,4 +1,6 @@
 .section {
+  --top-bottom-spacing: 0;
+
   padding: var(--top-bottom-spacing) 0;
 
   > * {

@@ -227,11 +227,17 @@ function decorateHeader() {
   if (!header) return;
   const meta = getMetadata('header') || 'header';
   if (meta === 'off') {
+    document.body.classList.add('no-header');
     header.remove();
     return;
   }
   header.className = meta;
   header.dataset.status = 'decorated';
+  const breadcrumbs = document.body.querySelector('breadcrumbs');
+  const breadcrumbsPath = getMetadata('breadcrumbs');
+  if (!(breadcrumbs || breadcrumbsPath)) return;
+  document.body.classList.add('has-breadcrumbs');
+  if (breadcrumbs) header.append(breadcrumbs);
 }
 
 export async function loadArea({ area } = { area: document }) {
