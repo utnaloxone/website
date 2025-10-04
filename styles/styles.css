@@ -1,33 +1,19 @@
 @font-face {
-  font-family: avenir-next-lt-pro;
-  src: url("/styles/fonts/avenir-next-400.woff2") format("woff2");
-  font-display: swap;
+  font-family: Montserrat;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/styles/fonts/montserrat.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: avenir-next-lt-pro;
-  src: url("/styles/fonts/avenir-next-400-italic.woff2") format("woff2");
-  font-display: swap;
+  font-family: Montserrat;
   font-style: italic;
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: avenir-next-lt-pro;
-  src: url("/styles/fonts/avenir-next-700.woff2") format("woff2");
+  font-weight: 100 900;
   font-display: swap;
-  font-style: normal;
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: avenir-next-lt-pro;
-  src: url("/styles/fonts/avenir-next-700-italic.woff2") format("woff2");
-  font-display: swap;
-  font-style: italic;
-  font-weight: 700;
+  src: url("/styles/fonts/montserrat-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
@@ -139,7 +125,7 @@
   --color-shaded: light-dark(#f9f9f9, #111);
 
   /* fonts */
-  --font-family: avenir-next-lt-pro, "Trebuchet MS", sans-serif;
+  --font-family: montserrat, "Trebuchet MS", sans-serif;
 
   /* headings */
   --heading-font-size-xxl: 32.44px;
@@ -206,7 +192,7 @@ a {
   &.btn {
     display: inline-block;
     line-height: 1;
-    font-weight: 700;
+    font-weight: 500;
     text-decoration: none;
     border: 2px solid;
     padding: 8px 12px;
@@ -295,6 +281,7 @@ h3,
 h4,
 h5,
 h6 {
+  font-weight: 600;
   line-height: var(--heading-line-height);
 }
 
@@ -305,8 +292,8 @@ h4 { font-size: var(--heading-font-size-m); }
 h5 { font-size: var(--heading-font-size-s); }
 h6 { font-size: var(--heading-font-size-xs); }
 
-h1:first-child {
-  margin-top: 12px;
+strong {
+  font-weight: 600;
 }
 
 input,

@@ -6,6 +6,10 @@
   color: light-dark(var(--color-dark), var(--color-light));
   transition: all 0.25s ease-in-out;
 
+  &.quiet {
+    background-color: transparent;
+  }
+
   picture {
     position: absolute;
     inset: 0;
