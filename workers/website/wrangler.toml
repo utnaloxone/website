@@ -1,6 +1,7 @@
-name = "website"
+name = "ak-website"
 main = "index.js"
 compatibility_date = "2025-02-14"
+keep_vars = true
 
 vars = { AEM_HOSTNAME = "main--author-kit--aemsites.aem.live" }
 

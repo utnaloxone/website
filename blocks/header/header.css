@@ -3,6 +3,7 @@ header {
   --logo-height: 40px;
   --mega-columns: 4;
 
+  display: block;
   position: fixed;
   top: 0;
   left: 0;
@@ -66,6 +67,10 @@ header {
         overflow: hidden;
       }
     }
+  }
+
+  .breadcrumbs {
+    display: none;
   }
 
   .menu,

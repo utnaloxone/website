@@ -24,7 +24,9 @@ const components = ['fragment', 'schedule'];
 const decorateArea = ({ area = document }) => {
   const eagerLoad = (parent, selector) => {
     const img = parent.querySelector(selector);
-    img?.removeAttribute('loading');
+    if (!img) return;
+    img.removeAttribute('loading');
+    img.fetchPriority = 'high';
   };
 
   eagerLoad(area, 'img');
