@@ -118,29 +118,25 @@ function decorateButton(link) {
   if (toReplace) trueParent.replaceChild(link, toReplace);
 }
 
-function localizeLink(locales, locale, a) {
+function localizeLink(locales, locale, url) {
   // If we are in the root locale, do nothing
-  if (locale.prefix === '') return;
-  try {
-    const url = new URL(a.href);
-    const { origin, pathname, search, hash } = url;
+  if (locale.prefix === '') return null;
 
-    // If the link is already localized, do nothing
-    if (pathname.startsWith(`${locale.prefix}/`)) return;
+  const { origin, pathname, search, hash } = url;
 
-    const localized = Object.keys(locales).some(
-      (key) => key !== '' && pathname.startsWith(`${key}/`),
-    );
-    if (localized) return;
+  // If the link is already localized, do nothing
+  if (pathname.startsWith(`${locale.prefix}/`)) return null;
 
-    a.href = `${origin}${locale.prefix}${pathname}${search}${hash}`;
-  } catch (ex) {
-    getConfig().log(ex, a);
-  }
+  const localized = Object.keys(locales).some(
+    (key) => key !== '' && pathname.startsWith(`${key}/`),
+  );
+  if (localized) return null;
+
+  return `${origin}${locale.prefix}${pathname}${search}${hash}`;
 }
 
-function decorateHash(a) {
-  const { hash } = new URL(a.href);
+function decorateHash(a, url) {
+  const { hash } = url;
   if (!hash || hash === '#') return {};
 
   const findHash = (name) => {
@@ -157,24 +153,47 @@ function decorateHash(a) {
   return { dnt, dnb };
 }
 
-function decorateLinks(el) {
-  const { widgets, locales, locale } = getConfig();
-  const anchors = [...el.querySelectorAll('a')];
-  return anchors.reduce((acc, a) => {
-    const { dnt, dnb } = decorateHash(a);
-    if (!dnt) localizeLink(locales, locale, a);
+function decorateHostname(hostnames, url) {
+  return hostnames.some((host) => url.hostname.endsWith(host));
+}
+
+function decorateLink(config, a) {
+  try {
+    const url = new URL(a.href);
+    const hostMatch = decorateHostname(config.hostnames, a, url);
+    if (hostMatch) a.href = a.href.replace(url.origin, '');
+
+    const { dnt, dnb } = decorateHash(a, url);
+    if (!dnt) {
+      const localized = localizeLink(config.locales, config.locale, a, url);
+      if (localized) a.href = localized;
+    }
+
     decorateButton(a);
 
     if (!dnb) {
       const { href } = a;
-      const found = widgets.some((pattern) => {
+      const found = config.widgets.some((pattern) => {
         const key = Object.keys(pattern)[0];
         if (!href.includes(pattern[key])) return false;
         a.classList.add(key, 'auto-block');
         return true;
       });
-      if (found) acc.push(a);
+      if (found) return a;
     }
+  } catch (ex) {
+    config.log('Could not decorate link');
+    config.log(ex);
+  }
+  return null;
+}
+
+function decorateLinks(el) {
+  const config = getConfig();
+  const anchors = [...el.querySelectorAll('a')];
+  return anchors.reduce((acc, a) => {
+    const decorated = decorateLink(config, a);
+    if (decorated) acc.push(decorated);
     return acc;
   }, []);
 }

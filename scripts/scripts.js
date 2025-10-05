@@ -1,5 +1,7 @@
 import { loadArea, setConfig } from './ak.js';
 
+const hostnames = ['authorkit.dev'];
+
 const locales = {
   '': { lang: 'en' },
   '/de': { lang: 'de' },
@@ -33,6 +35,6 @@ const decorateArea = ({ area = document }) => {
 };
 
 (async function loadPage() {
-  setConfig({ locales, widgets, components, decorateArea });
+  setConfig({ hostnames, locales, widgets, components, decorateArea });
   await loadArea();
 }());
