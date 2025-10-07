@@ -91,9 +91,19 @@
   }
 
   &.container {
+    --section-container-width: var(--grid-container-width);
+
+    &.container-4 {
+      --section-container-width: calc(calc(var(--grid-container-width) / 12) * 4);
+    }
+
+    &.container-6 {
+      --section-container-width: calc(calc(var(--grid-container-width) / 12) * 6);
+    }
+
     .default-content,
     .block-content {
-      max-width: var(--grid-container-width);
+      max-width: var(--section-container-width);
       margin: 0 auto;
     }
   }
