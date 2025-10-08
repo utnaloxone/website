@@ -71,3 +71,20 @@ For projects that want a few more batteries. Built by the team who brought you d
 
 ### Operations
 * Cloudflare Worker reference implementation
+
+## Design System Dimensions
+
+### Spacing
+XS, S, M, L, XL, XXL
+
+### Emphasis
+quiet, default, strong
+
+### Container columns
+1 - 12
+
+### Color tokens
+100-900
+
+### Color Schemes
+light, dark
