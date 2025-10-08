@@ -114,7 +114,7 @@ function decorateButton(link) {
     link.innerHTML = isUnder.innerHTML;
     isUnder.remove();
   }
-  const toReplace = isStrong || isEm || isStrike;
+  const toReplace = [isEm, isStrong, isStrike].find((el) => el.parentNode === trueParent);
   if (toReplace) trueParent.replaceChild(link, toReplace);
 }
 
@@ -153,14 +153,10 @@ function decorateHash(a, url) {
   return { dnt, dnb };
 }
 
-function decorateHostname(hostnames, url) {
-  return hostnames.some((host) => url.hostname.endsWith(host));
-}
-
 function decorateLink(config, a) {
   try {
     const url = new URL(a.href);
-    const hostMatch = decorateHostname(config.hostnames, a, url);
+    const hostMatch = config.hostnames.some((host) => url.hostname.endsWith(host));
     if (hostMatch) a.href = a.href.replace(url.origin, '');
 
     const { dnt, dnb } = decorateHash(a, url);
@@ -168,9 +164,7 @@ function decorateLink(config, a) {
       const localized = localizeLink(config.locales, config.locale, a, url);
       if (localized) a.href = localized;
     }
-
     decorateButton(a);
-
     if (!dnb) {
       const { href } = a;
       const found = config.widgets.some((pattern) => {

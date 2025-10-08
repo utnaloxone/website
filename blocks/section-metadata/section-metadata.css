@@ -1,5 +1,7 @@
 .section {
   --top-bottom-spacing: 0;
+  --section-container-width: var(--grid-container-width);
+  --section-column-width: var(--grid-column-width);
 
   padding: var(--top-bottom-spacing) 0;
 
@@ -91,20 +93,22 @@
   }
 
   &.container {
-    --section-container-width: var(--grid-container-width);
-
-    &.container-4 {
-      --section-container-width: calc(calc(var(--grid-container-width) / 12) * 4);
-    }
-
-    &.container-6 {
-      --section-container-width: calc(calc(var(--grid-container-width) / 12) * 6);
-    }
-
     .default-content,
     .block-content {
       max-width: var(--section-container-width);
       margin: 0 auto;
+    }
+
+    &.container-2 {
+      --section-container-width: calc(var(--grid-column-width) * 4);
+    }
+
+    &.container-4 {
+      --section-container-width: calc(var(--grid-column-width) * 8);
+    }
+
+    &.container-6 {
+      --section-container-width: var(--grid-container-width);
     }
   }
 
@@ -135,11 +139,30 @@ main .section {
   background-color: light-dark(var(--color-light), var(--color-dark));
 }
 
+@media (width >= 600px) {
+  .section {
+    &.grid-2 .block-content {
+      display: grid;
+      grid-template-columns: repeat(var(--grid-size), 1fr);
+    }
+  }
+}
+
 @media (width >= 900px) {
-  .section.grid-4 .block-content,
-  .section.grid-6 .block-content {
-    display: grid;
-    grid-template-columns: repeat(calc(var(--grid-size) / 2), 1fr);
+  .section {
+    &.grid-4 .block-content,
+    &.grid-6 .block-content {
+      display: grid;
+      grid-template-columns: repeat(calc(var(--grid-size) / 2), 1fr);
+    }
+
+    &.container.container-4 {
+      --section-container-width: calc(var(--grid-column-width) * 4);
+    }
+
+    &.container.container-6 {
+      --section-container-width: calc(var(--grid-column-width) * 6);
+    }
   }
 }
 

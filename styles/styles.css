@@ -19,6 +19,7 @@
 :root {
   /* grid */
   --grid-container-width: 83.4%;
+  --grid-column-width: calc(var(--grid-container-width) / 12);
   --grid-gutter-width: 8.3%;
 
   /* spacing */
