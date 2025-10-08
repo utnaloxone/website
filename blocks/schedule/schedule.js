@@ -72,7 +72,7 @@ export default async function init(a) {
         await loadEvent(a, event);
       }
     } catch {
-      log(`Could not get scheduled event: ${event.name}`);
+      config.log(`Could not get scheduled event: ${event.name}`);
     }
   }
   // fallback to default event
