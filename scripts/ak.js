@@ -118,7 +118,9 @@ function decorateButton(link) {
   if (toReplace) trueParent.replaceChild(link, toReplace);
 }
 
-function localizeLink(locales, locale, url) {
+export function localizeUrl({ config, url }) {
+  const { locales, locale } = config;
+
   // If we are in the root locale, do nothing
   if (locale.prefix === '') return null;
 
@@ -132,7 +134,7 @@ function localizeLink(locales, locale, url) {
   );
   if (localized) return null;
 
-  return `${origin}${locale.prefix}${pathname}${search}${hash}`;
+  return new URL(`${origin}${locale.prefix}${pathname}${search}${hash}`);
 }
 
 function decorateHash(a, url) {
@@ -161,8 +163,8 @@ function decorateLink(config, a) {
 
     const { dnt, dnb } = decorateHash(a, url);
     if (!dnt) {
-      const localized = localizeLink(config.locales, config.locale, a, url);
-      if (localized) a.href = localized;
+      const localized = localizeUrl({ config, url });
+      if (localized) a.href = localized.href;
     }
     decorateButton(a);
     if (!dnb) {

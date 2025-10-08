@@ -1,20 +1,21 @@
-import { getConfig } from '../../scripts/ak.js';
+import { getConfig, localizeUrl } from '../../scripts/ak.js';
 import ENV from '../../scripts/utils/env.js';
 import { loadFragment } from '../fragment/fragment.js';
 
-const { log } = getConfig();
+const config = getConfig();
 
 async function removeSchedule(a, e) {
   if (ENV === 'prod') {
     a.remove();
     return;
   }
-  if (e) log(e);
-  log(`Could not load: ${a.href}`);
+  if (e) config.log(e);
+  config.log(`Could not load: ${a.href}`);
 }
 
 async function loadEvent(a, event) {
-  const { pathname } = new URL(event.fragment);
+  const url = new URL(event.fragment);
+  const { pathname } = localizeUrl({ config, url });
   try {
     const fragment = await loadFragment(pathname);
 
