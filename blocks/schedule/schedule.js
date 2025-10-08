@@ -14,10 +14,11 @@ async function removeSchedule(a, e) {
 }
 
 async function loadEvent(a, event) {
-  const url = new URL(event.fragment);
-  const { pathname } = localizeUrl({ config, url });
   try {
-    const fragment = await loadFragment(pathname);
+    const url = new URL(event.fragment);
+    const localized = localizeUrl({ config, url });
+    const path = localized?.pathname || url.pathname;
+    const fragment = await loadFragment(path);
 
     let count = 0;
     let current = a;
