@@ -46,10 +46,11 @@ For projects that want a few more batteries. Built by the team who brought you d
 * Modal support
 
 ### Header and footer content
-* Brand - first link in header
+* Brand - First link in header
 * Main Menu - First list in header
 * Actions - Last section of header
 * Menu & mega menu support
+* Disable header/footer via meta props
 
 ### Scheduled content
 * Schedule content using spreadsheets
@@ -63,7 +64,7 @@ For projects that want a few more batteries. Built by the team who brought you d
 
 ### Developer tools
 * Environment detection
-* Extensible logging (console, corlogix, splunk, etc.)
+* Extensible logging (console, coralogix, splunk, etc.)
 * Buildless reactive framework support (Lit)
 * Hash utils patterns (#_blank, #_dnt, etc)
 * Modern CSS scoping & nesting
