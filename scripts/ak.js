@@ -114,7 +114,7 @@ function decorateButton(link) {
     link.innerHTML = isUnder.innerHTML;
     isUnder.remove();
   }
-  const toReplace = [isEm, isStrong, isStrike].find((el) => el.parentNode === trueParent);
+  const toReplace = [isEm, isStrong, isStrike].find((el) => el?.parentNode === trueParent);
   if (toReplace) trueParent.replaceChild(link, toReplace);
 }
 
