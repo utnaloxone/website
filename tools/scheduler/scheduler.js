@@ -1,4 +1,5 @@
 import { LitElement, html } from '../../deps/lit/dist/index.js';
+import ENV from '../../scripts/utils/env.js';
 import loadStyle from '../../scripts/utils/styles.js';
 import { formatDate } from './utils.js';
 
@@ -46,24 +47,22 @@ class AemScheduler extends LitElement {
   }
 
   get timestamp() {
-    const curr = new Date().toISOString().split('T');
-    const date = this.shadowRoot.querySelector('[type="date"]').value || curr[0];
-    const time = this.shadowRoot.querySelector('[type="time"]').value || curr[1];
-    const dateTime = new Date(`${date}T${time}`);
-    return Math.floor(dateTime.getTime());
+    const curr = new Date().toISOString();
+    const date = this.shadowRoot.querySelector('[type="datetime-local"]').value || curr[0];
+    const dateTime = new Date(date);
+    return Math.floor(dateTime.getTime() / 1000);
   }
 
   renderInput() {
     return html`
       <p class="date-label">Local</p>
-      <input type="date" />
-      <input type="time" />
+      <input type="datetime-local" />
     `;
   }
 
   renderDate() {
-    const { date, time } = formatDate(Number(this.current));
-    const { date: utcDate, time: utcTime } = formatDate(Number(this.current), 'UTC');
+    const { date, time } = formatDate(Number(this.current * 1000));
+    const { date: utcDate, time: utcTime } = formatDate(Number(this.current * 1000), 'UTC');
 
     return html`
       <div class="date-group">
@@ -121,6 +120,8 @@ export default function toggleScheduler() {
  * This will automatically detect if scheduler should be shown.
  */
 (async function autoLoadScheduler() {
+  if (ENV === 'prod') return;
+
   // Query param takes most precedence
   let sim = new URL(window.location.href).searchParams.get('schedule');
 
@@ -130,7 +131,7 @@ export default function toggleScheduler() {
       localStorage.removeItem('aem-schedule');
       return;
     }
-    if (sim === 'now') sim = Date.now();
+    if (sim === 'now') sim = Math.floor(Date.now() / 1000);
     localStorage.setItem('aem-schedule', sim);
   }
 
@@ -148,4 +149,3 @@ export default function toggleScheduler() {
 
   scheduler.current = sim;
 }());
-

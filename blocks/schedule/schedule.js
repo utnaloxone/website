@@ -54,7 +54,7 @@ function getDate() {
   // Attempt a simulated schedule
   const sim = localStorage.getItem('aem-schedule')
    || new URL(window.location.href).searchParams.get('schedule');
-  return sim || now;
+  return sim * 1000 || now;
 }
 
 export default async function init(a) {

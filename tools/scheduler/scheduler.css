@@ -50,7 +50,11 @@
   }
 
   input {
-    line-height: 20px;
+    margin-top: 8px;
+    line-height: 32px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: none;
   }
 }
 
