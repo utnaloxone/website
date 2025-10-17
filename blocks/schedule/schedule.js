@@ -15,6 +15,10 @@ async function removeSchedule(a, e) {
 
 async function loadEvent(a, event) {
   try {
+    if (!event.fragment) {
+      removeSchedule(a);
+      return;
+    }
     const url = new URL(event.fragment);
     const localized = localizeUrl({ config, url });
     const path = localized?.pathname || url.pathname;
@@ -32,6 +36,7 @@ async function loadEvent(a, event) {
       }
     }
 
+    // Do 1:1 swap if parent is a section
     if (count === 2) {
       const sections = fragment.querySelectorAll(':scope > .section');
       for (const section of sections) {
@@ -64,24 +69,25 @@ export default async function init(a) {
     return;
   }
   const { data } = await resp.json();
+  // Look
+  data.reverse();
   const now = getDate();
-  for (const event of data) {
+  const found = data.find((evt) => {
     try {
-      const start = Date.parse(event.start);
-      const end = Date.parse(event.end);
-      if (now > start && now < end) {
-        await loadEvent(a, event);
-      }
+      const start = Date.parse(evt.start);
+      const end = Date.parse(evt.end);
+      return now > start && now < end;
     } catch {
-      config.log(`Could not get scheduled event: ${event.name}`);
+      config.log(`Could not get scheduled event: ${evt.name}`);
+      return false;
     }
-  }
-  // fallback to default event
-  const defEvent = data.find((event) => !(event.start && event.end));
-  if (!defEvent) {
+  });
+
+  const event = found || data.find((evt) => !(evt.start && evt.end));
+  if (!event) {
     await removeSchedule(a);
     return;
   }
 
-  await loadEvent(a, defEvent);
+  await loadEvent(a, event);
 }
