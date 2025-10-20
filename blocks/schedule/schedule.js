@@ -16,7 +16,7 @@ async function removeSchedule(a, e) {
 async function loadEvent(a, event) {
   try {
     if (!event.fragment) {
-      removeSchedule(a);
+      a.remove();
       return;
     }
     const url = new URL(event.fragment);
