@@ -70,11 +70,11 @@ const formatSearchParams = (url) => {
   return search;
 };
 
-const formatRequest = (env, url) => {
-  url.hostname = env.AEM_HOSTNAME;
+const formatRequest = (env, request, url) => {
+  url.hostname = env.ORIGIN_HOSTNAME;
   url.port = '';
   url.protocol = 'https:';
-  const req = new Request(url);
+  const req = new Request(url, request);
   req.headers.set('x-forwarded-host', req.headers.get('host'));
   req.headers.set('x-byo-cdn-type', 'cloudflare');
   if (env.PUSH_INVALIDATION !== 'disabled') {
@@ -144,7 +144,7 @@ export default {
     const rumResp = getRUMRequest(req, url);
     if (rumResp) return rumResp;
 
-    const request = formatRequest(env, url);
+    const request = formatRequest(env, req, url);
 
     const cacheable = getCachability(url);
 
