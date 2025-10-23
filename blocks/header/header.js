@@ -110,7 +110,8 @@ async function decorateAction(header, pattern) {
   if (pattern === '/tools/widgets/toggle') decorateNavToggle(btn);
 }
 
-function decorateMenu(li) {
+function decorateMenu() {
+  // TODO: finish single menu support
   return null;
 }
 
