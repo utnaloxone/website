@@ -69,10 +69,12 @@ export default async function init(a) {
   const fragment = await loadFragment(path);
   if (fragment) {
     const elToReplace = getReplaceEl(a);
-
-    const children = fragment.querySelectorAll(':scope > *');
+    const sections = fragment.querySelectorAll(':scope > .section');
+    const children = sections.length === 1
+      ? fragment.querySelectorAll(':scope > *')
+      : [fragment];
     for (const child of children) {
-      elToReplace.insertAdjacentElement('afterend', child);
+      a.insertAdjacentElement('afterend', child);
     }
     elToReplace.remove();
   }
