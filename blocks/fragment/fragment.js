@@ -74,7 +74,7 @@ export default async function init(a) {
       ? fragment.querySelectorAll(':scope > *')
       : [fragment];
     for (const child of children) {
-      a.insertAdjacentElement('afterend', child);
+      elToReplace.insertAdjacentElement('afterend', child);
     }
     elToReplace.remove();
   }

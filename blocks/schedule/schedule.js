@@ -13,42 +13,57 @@ async function removeSchedule(a, e) {
   config.log(`Could not load: ${a.href}`);
 }
 
-async function loadEvent(a, event) {
+async function loadLocalizedEvent(event) {
+  const url = new URL(event.fragment);
+  const localized = localizeUrl({ config, url });
+  const path = localized?.pathname || url.pathname;
+
   try {
-    if (!event.fragment) {
-      a.remove();
-      return;
-    }
-    const url = new URL(event.fragment);
-    const localized = localizeUrl({ config, url });
-    const path = localized?.pathname || url.pathname;
     const fragment = await loadFragment(path);
+    return fragment;
+  } catch {
+    console.log(`Error fetching ${path} fragment`);
+    return null;
+  }
+}
 
-    let count = 0;
-    let current = a;
-    const parent = a.closest('.section');
+async function loadEvent(a, event, defEvent) {
+  // If no fragment path on purpose, remove the schedule.
+  if (!event.fragment) {
+    a.remove();
+    return;
+  }
 
-    // Walk up the DOM tree from child to parent
-    while (current && current !== parent) {
-      current = current.parentElement;
-      if (current && current !== parent) {
-        count += 1;
-      }
+  let fragment = await loadLocalizedEvent(event);
+  // Try the default event if the original match didn't work.
+  if (!fragment) fragment = await loadLocalizedEvent(defEvent);
+  // If still no fragment, remove the schedule link
+  if (!fragment) {
+    removeSchedule(a);
+    return;
+  }
+
+  let count = 0;
+  let current = a;
+  const parent = a.closest('.section');
+
+  // Walk up the DOM tree from child to parent
+  while (current && current !== parent) {
+    current = current.parentElement;
+    if (current && current !== parent) {
+      count += 1;
     }
+  }
 
-    // Do 1:1 swap if parent is a section
-    if (count === 2) {
-      const sections = fragment.querySelectorAll(':scope > .section');
-      for (const section of sections) {
-        parent.insertAdjacentElement('afterend', section);
-      }
-      parent.remove();
-      return;
+  // Do 1:1 swap if parent is a section
+  if (count === 2) {
+    const sections = fragment.querySelectorAll(':scope > .section');
+    for (const section of sections) {
+      parent.insertAdjacentElement('afterend', section);
     }
-
+    parent.remove();
+  } else {
     a.parentElement.replaceChild(fragment, a);
-  } catch (e) {
-    removeSchedule(a, e);
   }
 }
 
@@ -83,11 +98,15 @@ export default async function init(a) {
     }
   });
 
-  const event = found || data.find((evt) => !(evt.start && evt.end));
+  // Get a default event in case the main event doesn't load
+  const defEvent = data.find((evt) => !(evt.start && evt.end));
+
+  // Use either the found event or the default
+  const event = found || defEvent;
   if (!event) {
     await removeSchedule(a);
     return;
   }
 
-  await loadEvent(a, event);
+  await loadEvent(a, event, defEvent);
 }
