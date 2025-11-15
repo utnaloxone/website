@@ -3,7 +3,7 @@
     display: none;
 
     &.is-visible {
-      display: initial;
+      display: block;
     }
   }
 }
