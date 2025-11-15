@@ -2,7 +2,8 @@ import { getConfig } from '../../scripts/ak.js';
 
 const { log } = getConfig();
 
-function getTabList(tabItems, tabPanels) {
+function getTabList(tabs, tabPanels) {
+  const tabItems = tabs.querySelectorAll('li');
   const tabList = document.createElement('div');
   tabList.className = 'tab-list';
   tabList.role = 'tablist';
@@ -12,7 +13,10 @@ function getTabList(tabItems, tabPanels) {
     btn.role = 'tab';
     btn.id = `tab-${idx + 1}`;
     btn.textContent = tab.textContent;
-    if (idx === 0) btn.classList.add('is-active');
+    if (idx === 0) {
+      btn.classList.add('is-active');
+      tabPanels[0].classList.add('is-visible');
+    }
     tabList.append(btn);
 
     btn.addEventListener('click', () => {
@@ -33,12 +37,15 @@ export default function init(el) {
   // Find the top most parent where all tab sections live
   const parent = el.closest('.fragment-content, main');
 
+  // Forefully hide parent because sections may not be loaded yet
+  parent.style = 'display: none;';
+
   // Find the section that contains the actual block
   const currSection = el.closest('.section');
 
   // Find the tab items
-  const tabItems = el.querySelectorAll('li');
-  if (!tabItems.length) {
+  const tabs = el.querySelector('ul');
+  if (!tabs) {
     log('Please add an unordered list to the advanced tabs block.');
     return;
   }
@@ -55,12 +62,9 @@ export default function init(el) {
       return acc;
     }, []);
 
-  tabPanels[0].classList.add('is-visible');
+  const tabList = getTabList(tabs, tabPanels);
 
-  // Clear out all children
-  el.replaceChildren();
-
-  const tabList = getTabList(tabItems, tabPanels);
-
+  tabs.remove();
   el.append(tabList, ...tabPanels);
+  parent.removeAttribute('style');
 }

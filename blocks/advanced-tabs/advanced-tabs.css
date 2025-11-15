@@ -5,6 +5,10 @@
     &.is-visible {
       display: block;
     }
+
+    &[data-status="decorated"] {
+      display: none;
+    }
   }
 }
 
