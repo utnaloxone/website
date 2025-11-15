@@ -118,11 +118,10 @@ function decorateMenu() {
 function decorateMegaMenu(li) {
   const menu = li.querySelector('.fragment-content');
   if (!menu) return null;
-  const megaList = menu.closest('ul');
   const wrapper = document.createElement('div');
   wrapper.className = 'mega-menu';
   wrapper.append(menu);
-  megaList.parentElement.replaceChild(wrapper, megaList);
+  li.append(wrapper);
   return wrapper;
 }
 

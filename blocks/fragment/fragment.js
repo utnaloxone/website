@@ -41,27 +41,21 @@ export async function loadFragment(path) {
  * @returns the element that can be replaced
  */
 function getReplaceEl(a) {
-  let count = 0;
   let current = a;
-  const parent = a.closest('.section');
+  const ancestor = a.closest('.section');
 
-  // Walk up the DOM tree from child to parent
-  while (current && current !== parent) {
-    current = current.parentElement;
-    if (current && current !== parent) {
-      count += 1;
+  // Walk up the DOM from child to ancestor
+  // Break when there is more than one child
+  while (current && current !== ancestor) {
+    const childCount = current.parentElement.children.length;
+    if (childCount <= 1) {
+      current = current.parentElement;
+    } else {
+      break;
     }
   }
 
-  if (count > 1) return a;
-
-  const { children } = parent;
-  if (children.length > 1) return a;
-
-  const { children: containerChildren } = children[0];
-  if (containerChildren.length > 1) return a;
-
-  return parent;
+  return current;
 }
 
 export default async function init(a) {
