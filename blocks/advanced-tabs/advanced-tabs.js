@@ -50,11 +50,12 @@ export default function init(el) {
         section.id = `tabpanel-${idx + 1}`;
         section.role = 'tabpanel';
         section.setAttribute('aria-labelledby', `tab-${idx + 1}`);
-        if (idx === 0) section.classList.add('is-visible');
         acc.push(section);
       }
       return acc;
     }, []);
+
+  tabPanels[0].classList.add('is-visible');
 
   // Clear out all children
   el.replaceChildren();
