@@ -46,6 +46,7 @@ export function getColorScheme(section) {
 
 export function setColorScheme(section) {
   const scheme = getColorScheme(section);
+  if (!scheme) return;
   section.querySelectorAll(':scope > *').forEach((el) => {
     // Reset any pre-made color schemes
     el.classList.remove('light-scheme', 'dark-scheme');

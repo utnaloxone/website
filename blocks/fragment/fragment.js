@@ -11,26 +11,43 @@ function replaceDotMedia(path, doc) {
 }
 
 /**
+ * Inject a fragment into the dom to for calculating styles
+ * @param {HTMLElement} fragment the fragment
+ */
+function applyPageStyles(fragment) {
+  const container = document.createElement('div');
+  container.classList.add('hidden-container');
+  container.style = 'display: none';
+  document.body.append(container);
+  container.append(fragment);
+  return container;
+}
+
+/**
  * Loads a fragment.
  * @param {string} path The path to the fragment
  * @returns {HTMLElement} The root element of the fragment
  */
 export async function loadFragment(path) {
-  const resp = await fetch(`${path}.plain.html`);
-  if (!resp.ok) throw Error(`Couldn't fetch ${path}.plain.html`);
+  const resp = await fetch(`${path}`);
+  if (!resp.ok) throw Error(`Couldn't fetch ${path}`);
 
   const html = await resp.text();
   const doc = new DOMParser().parseFromString(html, 'text/html');
 
-  // Make images cacheable
-  replaceDotMedia(path, doc);
-
-  const sections = doc.body.querySelectorAll(':scope > div');
+  const sections = doc.body.querySelectorAll('main > div');
   const fragment = document.createElement('div');
   fragment.classList.add('fragment-content');
   fragment.append(...sections);
 
+  replaceDotMedia(path, doc);
+
+  const container = applyPageStyles(fragment);
+
   await loadArea({ area: fragment });
+
+  fragment.remove();
+  container.remove();
 
   return fragment;
 }
