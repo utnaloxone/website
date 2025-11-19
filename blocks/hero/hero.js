@@ -1,5 +1,18 @@
-function decorateBackground(hero, bg) {
+function setBackgroundFocus(img) {
+  const { title } = img.dataset;
+  if (!title?.includes('data-focal')) return;
+  delete img.dataset.title;
+  const [x, y] = title.split(':')[1].split(',');
+  img.style.objectPosition = `${x}% ${y}%`;
+}
+
+function decorateBackground(bg) {
   const bgPic = bg.querySelector('picture');
+  if (!bgPic) return;
+
+  const img = bgPic.querySelector('img');
+  setBackgroundFocus(img);
+
   const bgImgLink = bgPic.closest('a');
   if (bgImgLink) {
     const { href } = bgImgLink;
@@ -38,6 +51,6 @@ export default async function init(el) {
   if (rows.length) {
     const bg = rows.pop();
     bg.classList.add('hero-background');
-    decorateBackground(el, bg);
+    decorateBackground(bg);
   }
 }
