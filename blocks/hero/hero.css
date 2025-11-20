@@ -1,5 +1,5 @@
 .hero {
-  --gradient-start: light-dark(rgb(var(--color-light-base) / 80%), rgb(var(--color-dark-base) / 80%));
+  --gradient-start: rgb(var(--color-dark-base) / 80%);
   --gradient-end: transparent;
   --default-min-height: 360px;
   --min-height: var(--default-min-height);
@@ -21,6 +21,8 @@
   }
 
   &.light {
+    --gradient-start: rgb(var(--color-light-base) / 80%);
+
     color: var(--color-dark);
   }
 
