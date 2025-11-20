@@ -152,6 +152,12 @@
       }
     }
 
+    &.center {
+      .hero-foreground {
+        display: flex;
+      }
+    }
+
     &.stack {
       .hero-background {
         > div {
