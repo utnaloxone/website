@@ -33,12 +33,25 @@ function decorateBackground(bg) {
 }
 
 function decorateForeground(fg) {
-  const heading = fg.querySelector('h1, h2, h3, h4, h5, h6');
-  if (heading) {
-    heading.classList.add('hero-heading');
-    const detail = heading.previousElementSibling;
-    if (detail) {
-      detail.classList.add('hero-detail');
+  const { children } = fg;
+  for (const [idx, child] of [...children].entries()) {
+    const heading = child.querySelector('h1, h2, h3, h4, h5, h6');
+    const text = heading || child.querySelector('p');
+    if (heading) {
+      heading.classList.add('hero-heading');
+      const detail = heading.previousElementSibling;
+      if (detail) {
+        detail.classList.add('hero-detail');
+      }
+    }
+    // Determine foreground column types
+    if (text) {
+      child.classList.add('fg-text');
+      if (idx === 0) {
+        child.closest('.hero').classList.add('hero-text-start');
+      } else {
+        child.closest('.hero').classList.add('hero-text-end');
+      }
     }
   }
 }
