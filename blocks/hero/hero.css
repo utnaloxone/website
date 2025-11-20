@@ -1,6 +1,6 @@
 .hero {
   --gradient-start: rgb(var(--color-dark-base) / 80%);
-  --gradient-end: transparent;
+  --gradient-end: rgb(var(--color-dark-base) / 20%);
   --default-min-height: 360px;
   --min-height: var(--default-min-height);
 
@@ -112,7 +112,13 @@
     }
 
     .hero-foreground {
-      background: var(--color-shaded);
+      background: #111;
+    }
+
+    &.light {
+      .hero-foreground {
+        background: #f9f9f9;
+      }
     }
 
     &.hero-text-start {
