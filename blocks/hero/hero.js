@@ -15,34 +15,19 @@ function decorateBackground(bg) {
 
   const vidLink = bgPic.closest('a[href*=".mp4"]');
   if (!vidLink) return;
-  const { href } = vidLink;
-  if (!href.includes('.mp4')) return;
   const video = document.createElement('video');
-  video.setAttribute('muted', '');
+  video.src = vidLink.href;
+  video.loop = true;
+  video.muted = true;
+  video.inert = true;
   video.setAttribute('playsinline', '');
   video.setAttribute('preload', 'none');
-  video.setAttribute('loop', true);
   video.setAttribute('aria-hidden', 'true');
-  video.setAttribute('tabindex', '-1');
-
-  const source = document.createElement('source');
-  source.dataset.src = href;
-  source.type = 'video/mp4';
-  video.append(source);
-
-  const observer = new IntersectionObserver((entries) => {
-    if (!entries[0].isIntersecting) return;
-    source.src = source.dataset.src;
-    video.autoplay = true;
-    video.load();
-    video.addEventListener('canplay', () => {
-      video.play();
-      bgPic.remove();
-    });
-    observer.disconnect();
-  }, { threshold: 0 });
-  observer.observe(video);
-
+  video.load();
+  video.addEventListener('canplay', () => {
+    video.play();
+    bgPic.remove();
+  });
   vidLink.parentElement.append(video, bgPic);
   vidLink.remove();
 }
