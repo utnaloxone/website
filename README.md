@@ -86,6 +86,9 @@ Blocks are children of sections. A block adds visual context to parts of a page.
 ### Auto Block
 An auto block is a block generated from a pre-defined piece of content. Often times from a link that matches a particular pattern. Link-based auto blocks can be helpful when additional nesting of content is required.
 
+### Default content
+Default content is content that lives outside a block.
+
 ## Design System Dimensions
 
 ### Spacing
