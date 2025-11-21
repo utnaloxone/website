@@ -32,13 +32,13 @@
 
   &.hero-text-start {
     img {
-      object-position: 0% 50%;
+      object-position: 10% 50%;
     }
   }
 
   &.hero-text-end {
     img {
-      object-position: 100% 50%;
+      object-position: 90% 50%;
     }
   }
 
@@ -123,13 +123,13 @@
 
     &.hero-text-start {
       img {
-        object-position: 100% 50%;
+        object-position: 80% 50%;
       }
     }
 
     &.hero-text-end {
       img {
-        object-position: 0% 50%;
+        object-position: 20% 50%;
       }
     }
   }

@@ -13,23 +13,38 @@ function decorateBackground(bg) {
   const img = bgPic.querySelector('img');
   setBackgroundFocus(img);
 
-  const bgImgLink = bgPic.closest('a');
-  if (bgImgLink) {
-    const { href } = bgImgLink;
-    if (!href.includes('.mp4')) return;
-    const video = document.createElement('video');
-    video.setAttribute('muted', true);
-    video.setAttribute('autoplay', true);
-    video.setAttribute('playsinline', true);
-    video.setAttribute('loop', true);
-    video.setAttribute('src', href);
-    video.addEventListener('play', () => {
+  const vidLink = bgPic.closest('a[href*=".mp4"]');
+  if (!vidLink) return;
+  const { href } = vidLink;
+  if (!href.includes('.mp4')) return;
+  const video = document.createElement('video');
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('preload', 'none');
+  video.setAttribute('loop', true);
+  video.setAttribute('aria-hidden', 'true');
+  video.setAttribute('tabindex', '-1');
+
+  const source = document.createElement('source');
+  source.dataset.src = href;
+  source.type = 'video/mp4';
+  video.append(source);
+
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries[0].isIntersecting) return;
+    source.src = source.dataset.src;
+    video.autoplay = true;
+    video.load();
+    video.addEventListener('canplay', () => {
+      video.play();
       bgPic.remove();
     });
+    observer.disconnect();
+  }, { threshold: 0 });
+  observer.observe(video);
 
-    bgImgLink.parentElement.append(video, bgPic);
-    bgImgLink.remove();
-  }
+  vidLink.parentElement.append(video, bgPic);
+  vidLink.remove();
 }
 
 function decorateForeground(fg) {
