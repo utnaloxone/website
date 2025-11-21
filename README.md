@@ -73,16 +73,35 @@ For projects that want a few more batteries. Built by the team who brought you d
 ### Operations
 * Cloudflare Worker reference implementation
 
+## Patterns
+### Page
+A page is what holds your content. It can be styled using a metadata property called `template` which will load styles that apply to the entire page.
+
+### Section
+A section is a sub-section of your page. It can be styled using a `section-metadata` block. A section will control the layout of blocks.
+
+### Block
+Blocks are children of sections. A block adds visual context to parts of a page.
+
+### Auto Block
+An auto block is a block generated from a pre-defined piece of content. Often times from a link that matches a particular pattern. Link-based auto blocks can be helpful when additional nesting of content is required.
+
+### Default content
+Default content is content that lives outside a block.
+
 ## Design System Dimensions
 
 ### Spacing
 XS, S, M, L, XL, XXL
 
 ### Emphasis
-quiet, default, strong
+default, quiet, strong, negative
 
 ### Container columns
 1 - 12
+
+### Grid
+1 - 6
 
 ### Color tokens
 100-900
