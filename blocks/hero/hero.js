@@ -22,7 +22,6 @@ function decorateBackground(bg) {
   video.inert = true;
   video.setAttribute('playsinline', '');
   video.setAttribute('preload', 'none');
-  video.setAttribute('aria-hidden', 'true');
   video.load();
   video.addEventListener('canplay', () => {
     video.play();
