@@ -3,7 +3,7 @@ async function loadLivePreview(origin, loadPage) {
   mod.default(loadPage);
 }
 
-export function loadDa(loadPage) {
+export default function daPreview(loadPage) {
   const { search } = window.location;
   const ref = new URLSearchParams(search).get('dapreview');
   if (!ref) return;

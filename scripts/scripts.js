@@ -40,4 +40,7 @@ async function loadPage() {
 }
 await loadPage();
 
-import('../tools/da/da.js').then(({ default: daPreview }) => daPreview(loadPage));
+(function da() {
+  const ref = new URLSearchParams(window.Location.search).get('dapreview');
+  if (ref) import('../tools/da/da.js').then((mod) => mod.default(loadPage));
+}());
