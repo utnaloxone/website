@@ -34,7 +34,10 @@ const decorateArea = ({ area = document }) => {
   eagerLoad(area, 'img');
 };
 
-(async function loadPage() {
+async function loadPage() {
   setConfig({ hostnames, locales, widgets, components, decorateArea });
   await loadArea();
-}());
+}
+await loadPage();
+
+import('../tools/da/da.js').then(({ default: daPreview }) => daPreview(loadPage));

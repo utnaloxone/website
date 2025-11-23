@@ -296,9 +296,4 @@ export async function loadArea({ area } = { area: document }) {
   if (pageId) {
     localStorage.setItem('lazyhash', pageId);
   }
-
-  // Setup DA
-  if (new URL(window.location.href).searchParams.get('dapreview')) {
-    import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadArea));
-  }
 }());
