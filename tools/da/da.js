@@ -10,6 +10,6 @@ export default function daPreview(loadPage) {
   let origin;
   if (ref === 'on') origin = 'https://da.live';
   if (ref === 'local') origin = 'http://localhost:3000';
-  if (!ref) origin = `https://${ref}--da-live--adobe.aem.live`;
+  if (!origin) origin = `https://${ref}--da-live--adobe.aem.live`;
   loadLivePreview(origin, loadPage);
 }
