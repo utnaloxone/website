@@ -41,6 +41,6 @@ async function loadPage() {
 await loadPage();
 
 (function da() {
-  const ref = new URLSearchParams(window.Location.search).get('dapreview');
+  const ref = new URL(window.location.href).searchParams.get('dapreview');
   if (ref) import('../tools/da/da.js').then((mod) => mod.default(loadPage));
 }());
